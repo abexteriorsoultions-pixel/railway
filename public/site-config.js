@@ -6,7 +6,7 @@ window.SITE_CONFIG = {
   serviceArea: "Cherry Hill • Marlton • Voorhees • South Jersey",
   domain: "https://abexteriorsolutions.com",
   apiBaseUrl: "",
-  adminUrl: "#",
+  adminUrl: "/admin.html",
   socialLinks: {
     facebook: "#",
     instagram: "#",
