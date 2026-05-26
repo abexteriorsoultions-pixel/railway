@@ -45,16 +45,6 @@ BOOKING_TIMEZONE = os.environ.get("BOOKING_TIMEZONE", "America/New_York")
 DEFAULT_EVENT_DURATION_MINUTES = int(os.environ.get("DEFAULT_EVENT_DURATION_MINUTES", "120"))
 BOOKING_BLOCK_MINUTES = int(os.environ.get("BOOKING_BLOCK_MINUTES", str(DEFAULT_EVENT_DURATION_MINUTES)))
 ALLOWED_BOOKING_TIMES = {"8:00 AM", "10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"}
-FRONTEND_ORIGIN = os.environ.get("FRONTEND_ORIGIN", "").rstrip("/")
-
-
-def allowed_origin(handler):
-    origin = handler.headers.get("Origin", "").rstrip("/")
-    if FRONTEND_ORIGIN and origin == FRONTEND_ORIGIN:
-        return origin
-    if not FRONTEND_ORIGIN:
-        return origin or "*"
-    return FRONTEND_ORIGIN
 
 
 def parse_booking_start(value):
@@ -160,9 +150,7 @@ def send_json(handler, payload, status=HTTPStatus.OK):
     body = json.dumps(payload).encode("utf-8")
     handler.send_response(status)
     handler.send_header("Content-Type", "application/json")
-    handler.send_header("Access-Control-Allow-Origin", allowed_origin(handler))
-    handler.send_header("Access-Control-Allow-Credentials", "true")
-    handler.send_header("Vary", "Origin")
+    handler.send_header("Access-Control-Allow-Origin", "*")
     handler.send_header("Content-Length", str(len(body)))
     handler.end_headers()
     handler.wfile.write(body)
@@ -264,14 +252,6 @@ class Handler(SimpleHTTPRequestHandler):
                     "SELECT id, name, rating, review, service, created_at FROM reviews WHERE status = 'Approved' ORDER BY created_at DESC"
                 ).fetchall()
             send_json(self, {"reviews": [dict(row) for row in rows]})
-        elif path == "/admin-config.js":
-            body = f"window.ADMIN_CONFIG = {json.dumps({'frontendUrl': FRONTEND_ORIGIN or '/'}, indent=2)};\n".encode("utf-8")
-            self.send_response(HTTPStatus.OK)
-            self.send_header("Content-Type", "application/javascript")
-            self.send_header("Cache-Control", "no-store")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
         elif path == "/api/admin/session":
             send_json(self, {"authenticated": self.is_admin()})
         elif path == "/api/admin/bookings":
@@ -291,11 +271,9 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self.send_response(HTTPStatus.NO_CONTENT)
-        self.send_header("Access-Control-Allow-Origin", allowed_origin(self))
-        self.send_header("Access-Control-Allow-Credentials", "true")
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        self.send_header("Vary", "Origin")
         self.end_headers()
 
     def do_POST(self):
@@ -425,9 +403,7 @@ def send_json_with_cookie(handler, payload, cookie):
     handler.send_response(HTTPStatus.OK)
     handler.send_header("Content-Type", "application/json")
     handler.send_header("Set-Cookie", cookie)
-    handler.send_header("Access-Control-Allow-Origin", allowed_origin(handler))
-    handler.send_header("Access-Control-Allow-Credentials", "true")
-    handler.send_header("Vary", "Origin")
+    handler.send_header("Access-Control-Allow-Origin", "*")
     handler.send_header("Content-Length", str(len(body)))
     handler.end_headers()
     handler.wfile.write(body)
@@ -436,7 +412,7 @@ def send_json_with_cookie(handler, payload, cookie):
 if __name__ == "__main__":
     init_db()
     port = int(os.environ.get("PORT", "8000"))
-    host = os.environ.get("HOST", "0.0.0.0" if os.environ.get("RENDER") else "127.0.0.1")
+    host = os.environ.get("HOST", "0.0.0.0")
     server = ThreadingHTTPServer((host, port), Handler)
     print(f"AB Exterior Solutions running at http://{host}:{port}")
     server.serve_forever()
