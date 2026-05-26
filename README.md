@@ -25,11 +25,11 @@ This folder is the clean Railway version of the AB Exterior Solutions site.
 Create one Railway project with two services from the same GitHub repo:
 
 1. Frontend service
-   - Root Directory: `/railway/frontend`
+   - Root Directory: `/frontend`
    - Start Command: `python server.py`
 
 2. Backend service
-   - Root Directory: `/railway/backend`
+   - Root Directory: `/backend`
    - Start Command: `python server.py`
 
 ## Backend Variables

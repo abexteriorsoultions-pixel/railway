@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard | AB Exterior Solutions</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="admin-body">
+    <main class="admin-shell">
+      <section class="admin-login" id="loginPanel">
+        <a class="brand" href="/">
+          <span class="brand-mark">AB</span>
+          <span><strong>AB Exterior</strong><small>Admin</small></span>
+        </a>
+        <form id="loginForm">
+          <h1>Admin Login</h1>
+          <p>Use the admin credentials configured on the server.</p>
+          <label>Username<input name="username" value="admin" required /></label>
+          <label>Password<input type="password" name="password" placeholder="admin123" required /></label>
+          <button class="btn btn-green" type="submit">Log In</button>
+          <p class="form-note" id="loginNote"></p>
+        </form>
+      </section>
+
+      <section class="dashboard hidden" id="dashboard">
+        <div class="dashboard-top">
+          <div>
+            <p class="eyebrow">Admin dashboard</p>
+            <h1>Bookings & Reviews</h1>
+          </div>
+          <div class="dashboard-actions">
+            <a class="btn btn-white" id="viewSiteLink" href="/">View Site</a>
+            <button class="btn btn-dark" id="logoutBtn">Log Out</button>
+          </div>
+        </div>
+
+        <section class="admin-card">
+          <div class="section-heading compact">
+            <h2>Bookings</h2>
+            <p>Update each appointment as it moves from request to completion.</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Address</th>
+                  <th>Service</th>
+                  <th>Preferred</th>
+                  <th>Notes</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="bookingsTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="admin-card">
+          <div class="section-heading compact">
+            <h2>Reviews</h2>
+            <p>Only approved reviews appear publicly on the website.</p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Rating</th>
+                  <th>Service</th>
+                  <th>Review</th>
+                  <th>Status</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody id="reviewsTable"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+    <script src="/admin-config.js"></script>
+    <script src="/admin.js"></script>
+  </body>
+</html>

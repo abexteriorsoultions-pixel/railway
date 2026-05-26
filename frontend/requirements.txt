@@ -1,0 +1,2 @@
+# This service uses only Python's standard library.
+# Keep this file so Railway detects it as a Python app.
