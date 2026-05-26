@@ -1,0 +1,2 @@
+# This site uses only Python's standard library.
+# Keep this file so hosting platforms detect it as a Python app.
