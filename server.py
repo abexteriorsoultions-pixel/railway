@@ -45,6 +45,14 @@ BOOKING_TIMEZONE = os.environ.get("BOOKING_TIMEZONE", "America/New_York")
 DEFAULT_EVENT_DURATION_MINUTES = int(os.environ.get("DEFAULT_EVENT_DURATION_MINUTES", "120"))
 BOOKING_BLOCK_MINUTES = int(os.environ.get("BOOKING_BLOCK_MINUTES", str(DEFAULT_EVENT_DURATION_MINUTES)))
 ALLOWED_BOOKING_TIMES = {"8:00 AM", "10:00 AM", "12:00 PM", "2:00 PM", "4:00 PM"}
+TIME_ALIASES = {
+    "08:00": "8:00 AM",
+    "8:00": "8:00 AM",
+    "10:00": "10:00 AM",
+    "12:00": "12:00 PM",
+    "14:00": "2:00 PM",
+    "16:00": "4:00 PM",
+}
 
 
 def parse_booking_start(value):
@@ -55,6 +63,7 @@ def parse_booking_start(value):
     except ValueError:
         return None
 
+    time_part = TIME_ALIASES.get(time_part.strip(), time_part.strip())
     if time_part not in ALLOWED_BOOKING_TIMES:
         return None
 
